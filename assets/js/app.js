@@ -323,7 +323,8 @@ const supabaseClient = window.supabase && supabaseUrl && supabaseAnonKey
 
 const state = {
   activeMountainId: "bukhansan",
-  mountainSearch: ""
+  mountainSearch: "",
+  isSubmittingPost: false
 };
 
 const screens = [...document.querySelectorAll(".screen")];
@@ -432,11 +433,158 @@ function validateCompanionForm() {
   if (missing.length) {
     validationMessage.textContent = `다음 항목을 입력해 주세요: ${missing.join(", ")}`;
     validationMessage.classList.add("show");
-    return false;
+    return null;
   }
 
   validationMessage.classList.remove("show");
-  return true;
+  return {
+    mountain,
+    title,
+    meetingTime,
+    meetingPoint,
+    groupSize,
+    description,
+    intents: [...document.querySelectorAll("[data-multi-group='intent'] .option-btn.selected")].map((button) => button.textContent.trim()),
+    level: document.querySelector("[data-single-group='level'] .option-btn.selected")?.textContent.trim() || ""
+  };
+}
+
+function renderMountainSelectOptions() {
+  const mountainSelect = document.getElementById("mountain");
+  if (!mountainSelect) {
+    return;
+  }
+
+  const currentValue = mountainSelect.value;
+  const options = getMountains().map((mountain) => `<option value="${mountain.name}">${mountain.name}</option>`).join("");
+  mountainSelect.innerHTML = `<option value="">산을 선택하세요</option>${options}`;
+  if ([...mountainSelect.options].some((option) => option.value === currentValue)) {
+    mountainSelect.value = currentValue;
+  }
+}
+
+function mapFormTypeToPostType(typeLabel) {
+  const typeMap = {
+    "후기": "review",
+    "질문": "free",
+    "지도 메모": "tip",
+    "정보 공유": "tip",
+    "동행 모집": "free"
+  };
+
+  return typeMap[typeLabel] || "free";
+}
+
+function mapLevelToDifficulty(levelLabel) {
+  if (levelLabel.includes("입문") || levelLabel.includes("가벼운")) {
+    return "easy";
+  }
+  if (levelLabel.includes("중급")) {
+    return "medium";
+  }
+  if (levelLabel.includes("도전")) {
+    return "hard";
+  }
+  return null;
+}
+
+function buildPostContent(formData) {
+  const detailLines = [
+    `유형: ${formData.groupSize}`,
+    `일정: ${formData.meetingTime}`,
+    `코스/출발: ${formData.meetingPoint}`,
+    formData.intents.length ? `주제: ${formData.intents.join(", ")}` : null,
+    formData.level ? `난이도 톤: ${formData.level}` : null,
+    "",
+    formData.description
+  ].filter(Boolean);
+
+  return detailLines.join("\n");
+}
+
+function resetCreateForm() {
+  companionForm.reset();
+  validationMessage.classList.remove("show");
+  validationMessage.textContent = "";
+  document.querySelectorAll("[data-multi-group='intent'] .option-btn").forEach((button, index) => {
+    button.classList.toggle("selected", index === 0);
+  });
+  document.querySelectorAll("[data-single-group='level'] .option-btn").forEach((button, index) => {
+    button.classList.toggle("selected", index === 0);
+  });
+}
+
+async function createPostFromForm() {
+  if (!supabaseClient) {
+    showToast("먼저 Supabase 설정을 입력해 주세요.");
+    return;
+  }
+
+  const formData = validateCompanionForm();
+  if (!formData) {
+    return;
+  }
+
+  if (state.isSubmittingPost) {
+    return;
+  }
+
+  state.isSubmittingPost = true;
+  const submitButton = companionForm.querySelector("button[type='submit']");
+  const originalButtonText = submitButton.textContent;
+  submitButton.disabled = true;
+  submitButton.textContent = "저장 중...";
+
+
+  try {
+    const { data: authResult, error: authError } = await supabaseClient.auth.getUser();
+    if (authError) {
+      throw authError;
+    }
+
+    const user = authResult?.user;
+    if (!user) {
+      showToast("게시글 작성은 로그인 후 가능합니다.");
+      return;
+    }
+
+    const selectedMountain = getMountains().find((mountain) => mountain.name === formData.mountain) || null;
+    const perceivedDifficulty = mapLevelToDifficulty(formData.level);
+    const payload = {
+      user_id: user.id,
+      mountain_id: selectedMountain?.dbId || null,
+      title: formData.title,
+      content: buildPostContent(formData),
+      post_type: mapFormTypeToPostType(formData.groupSize),
+      perceived_difficulty: perceivedDifficulty,
+      beginner_friendly: perceivedDifficulty === "easy" ? true : null,
+      confusing_section: formData.intents.some((intent) => intent.includes("길찾기") || intent.includes("주의")),
+      visibility: "public"
+    };
+
+    const { error: insertError } = await supabaseClient.from("posts").insert(payload);
+    if (insertError) {
+      throw insertError;
+    }
+
+    if (selectedMountain?.id) {
+      state.activeMountainId = selectedMountain.id;
+    }
+
+    await loadPostsFromSupabase({ silent: true });
+    resetCreateForm();
+    goScreen("companion");
+    showToast("게시글이 저장됐습니다. 커뮤니티 브리핑을 새로 불러왔습니다.");
+  } catch (error) {
+    console.error("Failed to create post", error);
+    validationMessage.textContent = error?.message || "게시글 저장에 실패했습니다. Supabase 설정과 로그인 상태를 확인해 주세요.";
+    validationMessage.classList.add("show");
+    showToast("게시글 저장에 실패했습니다.");
+  } finally {
+    state.isSubmittingPost = false;
+    submitButton.disabled = false;
+    submitButton.textContent = originalButtonText;
+  }
 }
 
 function getMountains() {
@@ -646,6 +794,7 @@ async function loadMountainsFromSupabase() {
       state.activeMountainId = runtimeData.mountains[0].id;
     }
 
+    renderMountainSelectOptions();
     renderMountainCards();
     renderHomeMapBriefs();
     renderDetailScreen();
@@ -702,10 +851,12 @@ function mapPostRecord(post, lookups) {
   };
 }
 
-async function loadPostsFromSupabase() {
+async function loadPostsFromSupabase(options = {}) {
   if (!supabaseClient) {
     return;
   }
+
+  const { silent = false } = options;
 
   try {
     const { data: posts, error: postsError } = await supabaseClient
@@ -737,7 +888,9 @@ async function loadPostsFromSupabase() {
     }
 
     if (!posts?.length) {
-      showToast("Supabase에 커뮤니티 글이 아직 없습니다.");
+      if (!silent) {
+        showToast("Supabase에 커뮤니티 글이 아직 없습니다.");
+      }
       return;
     }
 
@@ -783,10 +936,14 @@ async function loadPostsFromSupabase() {
     renderFeedPosts("home-feed-list", getFeeds());
     renderFeedPosts("companion-list", getFeeds());
     renderDetailScreen();
-    showToast("커뮤니티 글을 Supabase 데이터로 불러왔습니다.");
+    if (!silent) {
+      showToast("커뮤니티 글을 Supabase 데이터로 불러왔습니다.");
+    }
   } catch (error) {
     console.error("Failed to load posts from Supabase", error);
-    showToast("커뮤니티 글 연결에 실패해 기본 샘플 데이터를 표시합니다.");
+    if (!silent) {
+      showToast("커뮤니티 글 연결에 실패해 기본 샘플 데이터를 표시합니다.");
+    }
   }
 }
 
@@ -1023,6 +1180,7 @@ function renderModalCompanions() {
 }
 
 function renderApp() {
+  renderMountainSelectOptions();
   renderMountainCards();
   renderFeedPosts("home-feed-list", getFeeds());
   renderHomeMapBriefs();
@@ -1166,20 +1324,9 @@ mountainSearchInput.addEventListener("keydown", (event) => {
   showToast(`${firstMountain.name} 지도와 커뮤니티 화면으로 이동했습니다.`);
 });
 
-companionForm.addEventListener("submit", (event) => {
+companionForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  if (!validateCompanionForm()) {
-    return;
-  }
-  goScreen("companion");
-  companionForm.reset();
-  document.querySelectorAll("[data-multi-group='intent'] .option-btn").forEach((button, index) => {
-    button.classList.toggle("selected", index === 0);
-  });
-  document.querySelectorAll("[data-single-group='level'] .option-btn").forEach((button, index) => {
-    button.classList.toggle("selected", index === 0);
-  });
-  showToast("🎉 게시글이 올라갔어요! 커뮤니티와 산 상세에 반영됩니다.");
+  await createPostFromForm();
 });
 
 async function initApp() {

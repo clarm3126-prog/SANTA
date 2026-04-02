@@ -37,7 +37,6 @@
 ### 아직 더미인 부분
 - `profile`
 - `companions`
-- 게시글 작성 submit
 - 댓글 작성
 - 좋아요 저장
 - 북마크 저장
@@ -84,10 +83,9 @@
 1. `assets/js/supabase-config.js`에 실제 프로젝트 값 입력
 2. 코어 스키마 SQL 실행
 3. 산/코스 시드 SQL 실행
-4. `posts` 시드 또는 실제 게시글 데이터 입력
-5. 게시글 작성 폼을 `posts` insert와 연결
-6. `post_likes`, `comments`, `bookmarks` 연결
-7. `profiles`, `user_badges`로 프로필 화면 교체
+4. 로그인 후 작성 화면에서 `posts` insert 동작 확인
+5. `post_likes`, `comments`, `bookmarks` 연결
+6. `profiles`, `user_badges`로 프로필 화면 교체
 
 ## 주의할 점
 - 현재 앱은 `정적 데모 + 부분적 실DB 읽기` 상태다.
