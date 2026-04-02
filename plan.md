@@ -1,570 +1,140 @@
-# 인풋 기반 페이징 전환 계획
-
-## 1. 목적
-현재 코드베이스는 오프셋 페이징을 구현하고 있지 않지만, 일부 목록에서 고정 `slice(0, 2)`를 사용하거나 전체 배열을 그대로 렌더링하고 있다. 이 상태에서는 이후 API 연동 시 흔히 쓰는 `offset`, `page`, `pageSize` 중심 구조로 기울기 쉽고, 필터 조합이나 데이터 변동 상황에서 중복/누락 문제가 생기기 쉽다.
-
-이번 변경의 목적은 다음과 같다.
-
-- 목록 조회를 `offset` 기반이 아니라 `input` 기반으로 통일한다.
-- 각 화면이 `배열 -> 직접 렌더`가 아니라 `조회 입력 -> 조회 결과 -> 렌더` 순서로 동작하게 만든다.
-- 현재 정적 데이터 구조에서도 같은 인터페이스를 먼저 도입해, 이후 서버/API 도입 시 교체 비용을 줄인다.
-- 홈, 동행, 상세 피드, 모달 추천 등 여러 목록이 서로 다른 조건을 가지더라도 같은 페이징 계약을 재사용하게 만든다.
-
-## 2. 현재 코드베이스 기준 분석
-
-### 2.1 실제 파일 구조
-변경 대상은 아래 세 파일이 중심이다.
-
-- `/home/user/un-ad/assets/js/app.js`
-- `/home/user/un-ad/index.html`
-- `/home/user/un-ad/assets/css/styles.css`
-
-### 2.2 현재 목록 렌더 구조
-`/home/user/un-ad/assets/js/app.js` 기준으로 목록 렌더는 아래처럼 구성되어 있다.
-
-- `renderMountainCards()`
-- `renderCompanionCards(targetId, items)`
-- `renderFeedPosts(targetId, items, compact = false)`
-- `renderDetailScreen()`
-- `renderModalCompanions()`
-- `renderApp()`
-
-조회 헬퍼는 아래 수준에 머물러 있다.
-
-- `mountainById(id)`
-- `companionByMountain(id)`
-- `feedsByMountain(id)`
-
-즉, 지금 구조는 “입력 객체를 받아 조회”하는 구조가 아니라, “필터링 함수가 배열을 반환하고 렌더 함수가 그 배열을 그대로 소비”하는 구조다.
-
-### 2.3 현재 페이징 유사 동작의 실제 위치
-실제 소스에서 목록 수를 제한하는 지점은 아래 두 곳이다.
-
-- `renderModalCompanions()` 내부: `companionByMountain(state.activeMountainId).slice(0, 2)`
-- `renderApp()` 내부 홈 동행 목록: `APP_DATA.companions.slice(0, 2)`
-
-그 외에는 전부 전체 렌더다.
-
-- 홈 산 목록: `APP_DATA.mountains`
-- 동행 화면 목록: `APP_DATA.companions`
-- 홈 피드: `APP_DATA.feeds`
-- 상세 피드: `feedsByMountain(mountain.id)`
-
-즉, 현재는 오프셋 페이징을 제거하는 작업이 아니라, 아직 없는 페이지네이션 레이어를 처음 도입하면서 그 계약을 `input` 기반으로 설계하는 작업에 가깝다.
-
-### 2.4 현재 상태 모델의 한계
-현재 전역 상태는 아래 한 개뿐이다.
-
-```js
-const state = {
-  activeMountainId: "bukhansan"
-};
-```
-
-이 상태 모델로는 아래를 표현할 수 없다.
-
-- 목록별 조회 조건
-- 현재 커서 또는 다음 조회 기준
-- 화면별 limit
-- 정렬 기준
-- 필터 변경 시 페이지 리셋
-- 더보기 가능 여부
-
-따라서 이번 작업의 핵심은 렌더 함수보다 먼저 `state`와 `query input` 모델을 확장하는 것이다.
-
-## 3. 목표 상태
-목표는 각 목록이 아래 흐름으로 움직이게 만드는 것이다.
-
-1. 화면/이벤트가 특정 목록의 조회 입력을 만든다.
-2. 조회 함수가 그 입력을 받아 `items + pageInfo`를 반환한다.
-3. 렌더 함수는 결과 객체를 기반으로 UI와 페이저를 그린다.
-4. 더보기/다음 버튼은 `offset += limit` 같은 숫자 증가가 아니라, 다음 입력을 생성해서 다시 조회한다.
-
-이때 `input`은 아래 형태를 기본으로 삼는다.
-
-```js
-{
-  limit: 10,
-  after: null,
-  filters: {
-    mountainId: "bukhansan",
-    tag: null,
-    difficulty: null,
-    hostVerified: null
-  },
-  sort: {
-    field: "createdAt",
-    direction: "desc"
-  }
-}
-```
-
-정적 데이터 단계에서는 `after`를 실제 DB cursor 대신 `마지막 아이템 id` 또는 `정렬 키 조합`으로 흉내 낼 수 있다.
-
-조회 결과는 아래 형태를 목표로 한다.
-
-```js
-{
-  items: [...],
-  pageInfo: {
-    hasNextPage: true,
-    endCursor: "feed-002"
-  },
-  input: {
-    ...현재 입력
-  },
-  nextInput: {
-    ...다음 요청에 사용할 입력
-  }
-}
-```
-
-## 4. 설계 원칙
-
-### 4.1 `offset`, `page` 숫자를 상태에 두지 않는다
-다음 페이지를 판단하는 기준은 항상 `after` 혹은 그와 동등한 입력 값으로 표현한다.
-
-나쁜 예:
-
-```js
-{ page: 3, pageSize: 10 }
-```
-
-좋은 예:
-
-```js
-{ limit: 10, after: "companion-003" }
-```
-
-### 4.2 조회 입력과 화면 상태를 분리한다
-렌더 함수 내부에서 바로 `.slice()` 하지 않는다. 렌더 함수는 이미 계산된 결과만 받는다.
-
-### 4.3 각 목록은 독립된 입력 상태를 가진다
-최소한 아래 목록은 상태를 분리해야 한다.
-
-- 홈 동행 목록
-- 전체 동행 목록
-- 홈 피드 목록
-- 상세 피드 목록
-- 모달 동행 추천 목록
-
-필요 시 홈 산 목록도 같은 구조로 맞춘다.
-
-### 4.4 필터가 바뀌면 커서를 리셋한다
-예를 들어 산이 바뀌거나 태그가 바뀌면 기존 `after`는 무효다. 이때는 새 입력을 만들고 첫 페이지부터 다시 조회해야 한다.
-
-### 4.5 현재 정적 데이터 구조에서도 서버 계약처럼 동작하게 만든다
-지금은 `APP_DATA` 배열이 데이터 소스이지만, 조회 함수 시그니처는 서버 응답과 유사하게 맞춰둔다.
-
-## 5. 상세 실행 계획
-
-### 5.1 1단계: 목록별 조회 입력 상태 도입
-`/home/user/un-ad/assets/js/app.js`의 `state`를 아래처럼 확장한다.
-
-```js
-const state = {
-  activeMountainId: "bukhansan",
-  paging: {
-    homeCompanions: {
-      limit: 2,
-      after: null,
-      filters: {},
-      sort: { field: "id", direction: "asc" }
-    },
-    companionList: {
-      limit: 6,
-      after: null,
-      filters: {
-        mountainId: null,
-        tag: null,
-        verifiedOnly: false
-      },
-      sort: { field: "id", direction: "asc" }
-    },
-    homeFeed: {
-      limit: 3,
-      after: null,
-      filters: {},
-      sort: { field: "id", direction: "asc" }
-    },
-    detailFeed: {
-      limit: 2,
-      after: null,
-      filters: {
-        mountainId: "bukhansan"
-      },
-      sort: { field: "id", direction: "asc" }
-    },
-    modalCompanions: {
-      limit: 2,
-      after: null,
-      filters: {
-        mountainId: "bukhansan"
-      },
-      sort: { field: "id", direction: "asc" }
-    }
-  }
-};
-```
-
-주의할 점:
-
-- 초기 단계에서는 정렬 필드가 실제 데이터에 없는 `createdAt`보다 기존 `id` 기반이 안전하다.
-- 이후 실제 시간 기반 정렬이 필요하면 `APP_DATA`에 `createdAt`을 추가한다.
-
-### 5.2 2단계: 공통 조회 유틸 작성
-`app.js`에 아래 성격의 공통 함수를 추가한다.
-
-- `applyFilters(items, filters)`
-- `applySort(items, sort)`
-- `paginateByInput(items, input)`
-- `queryCompanions(input)`
-- `queryFeeds(input)`
-- 필요 시 `queryMountains(input)`
-
-핵심은 `paginateByInput`이다.
-
-동작 개념:
-
-1. 필터 적용
-2. 정렬 적용
-3. `after`가 없으면 처음부터 `limit`개 반환
-4. `after`가 있으면 해당 커서 아이템 다음부터 `limit`개 반환
-5. 마지막 아이템의 `id`를 `endCursor`로 계산
-6. `hasNextPage` 계산
-7. `nextInput` 계산
-
-예시 시그니처:
-
-```js
-function paginateByInput(items, input) {
-  const startIndex = input.after
-    ? items.findIndex((item) => item.id === input.after) + 1
-    : 0;
-
-  const pageItems = items.slice(startIndex, startIndex + input.limit);
-  const endCursor = pageItems.length ? pageItems[pageItems.length - 1].id : null;
-  const hasNextPage = startIndex + input.limit < items.length;
-
-  return {
-    items: pageItems,
-    pageInfo: {
-      hasNextPage,
-      endCursor
-    },
-    input,
-    nextInput: hasNextPage
-      ? { ...input, after: endCursor }
-      : null
-  };
-}
-```
-
-이 방식은 내부 구현에서 `slice`를 쓰더라도 외부 계약은 `offset`이 아니라 `input.after` 기반이라는 점이 중요하다.
-
-### 5.3 3단계: 기존 렌더 함수의 책임 축소
-현재 렌더 함수는 “무엇을 얼마나 보여줄지”까지 암묵적으로 결정한다. 이를 아래처럼 나눈다.
-
-- 조회 함수: 무엇을 얼마나 가져올지 결정
-- 렌더 함수: 전달된 결과만 그림
-
-변경 방향:
-
-- `renderCompanionCards(targetId, items)` → 유지 가능
-- `renderFeedPosts(targetId, items, compact = false)` → 유지 가능
-- 대신 `renderCompanionSection(targetId, queryResult, options)` 같은 중간 렌더 계층 추가
-- `renderFeedSection(targetId, queryResult, options)` 추가
-
-이렇게 하면 카드 렌더 함수는 재사용하고, 페이저 UI는 섹션 렌더 함수가 담당할 수 있다.
-
-### 5.4 4단계: 각 화면을 입력 기반 조회로 전환
-#### 홈 동행 목록
-현재:
-
-```js
-renderCompanionCards("home-companion-list", APP_DATA.companions.slice(0, 2));
-```
-
-변경:
-
-```js
-const result = queryCompanions(state.paging.homeCompanions);
-renderCompanionSection("home-companion-list", result, { mode: "home" });
-```
-
-#### 전체 동행 목록
-현재:
-
-```js
-renderCompanionCards("companion-list", APP_DATA.companions);
-```
-
-변경:
-
-```js
-const result = queryCompanions(state.paging.companionList);
-renderCompanionSection("companion-list", result, { mode: "full" });
-```
-
-#### 상세 피드
-현재:
-
-```js
-renderFeedPosts("detail-feed-list", feedsByMountain(mountain.id), true);
-```
-
-변경:
-
-- `state.paging.detailFeed.filters.mountainId = state.activeMountainId`
-- `queryFeeds(state.paging.detailFeed)` 호출
-- 결과를 `renderFeedSection()`으로 전달
-
-#### 모달 동행 추천
-현재:
-
-```js
-const items = companionByMountain(state.activeMountainId).slice(0, 2);
-```
-
-변경:
-
-- `state.paging.modalCompanions.filters.mountainId = state.activeMountainId`
-- `queryCompanions(state.paging.modalCompanions)` 호출
-- 결과를 모달 전용 렌더로 전달
-
-### 5.5 5단계: 페이징 UI 추가
-현재 `index.html`은 목록 컨테이너만 있고 페이저 영역이 없다. 아래 위치에 별도 페이저 슬롯을 추가하는 방식이 가장 안전하다.
-
-추천 추가 위치:
-
-- `#home-companion-list` 아래
-- `#companion-list` 아래
-- `#home-feed-list` 아래
-- `#detail-feed-list` 아래
-- `#modal-companion-list` 아래
-
-예시:
-
-```html
-<div id="home-companion-list"></div>
-<div id="home-companion-pager" class="pager-slot"></div>
-```
-
-버튼 형태는 우선 단순화한다.
-
-- `더 보기`
-- `처음부터 다시 보기`
-- 필요 시 현재 조건 텍스트
-
-이 단계에서는 번호형 페이지 UI를 만들지 않는다. 번호형 UI는 다시 오프셋 사고로 돌아가기 쉽다.
-
-### 5.6 6단계: 페이저 이벤트 도입
-`document.addEventListener("click", ...)` 이벤트 위임에 아래 액션을 추가한다.
-
-- `data-action="next-page"`
-- `data-action="reset-page"`
-
-버튼에는 어떤 목록인지 구분할 식별자를 실어야 한다.
-
-예시:
-
-```html
-<button data-action="next-page" data-list-key="companionList">더 보기</button>
-```
-
-동작 예시:
-
-```js
-const nextPageButton = event.target.closest("[data-action='next-page']");
-if (nextPageButton) {
-  const listKey = nextPageButton.dataset.listKey;
-  const current = state.paging[listKey];
-  const result = runQueryByListKey(listKey);
-  if (result.nextInput) {
-    state.paging[listKey] = result.nextInput;
-    rerenderListByKey(listKey);
-  }
-  return;
-}
-```
-
-단, 실제 구현에서는 `runQueryByListKey`가 현재 입력 기준 결과를 알아야 하므로, 더 안정적인 방식은 렌더 시점에 `nextCursor`를 상태에 보관하는 것이다.
-
-추천 방식:
-
-- `state.paginationMeta[listKey] = result.pageInfo`
-- 클릭 시 `pageInfo.endCursor`로 새 입력 생성
-
-### 5.7 7단계: 필터와 activeMountainId 변경 시 입력 리셋
-현재는 산 카드 클릭 시 `state.activeMountainId`만 바꾸고 `renderDetailScreen()`만 호출한다.
-
-이 구조에서는 상세 피드/모달 동행 목록이 이전 커서를 계속 들고 있을 수 있으므로, 산 변경 시 아래를 함께 수행해야 한다.
-
-- `state.paging.detailFeed = createInitialDetailFeedInput(state.activeMountainId)`
-- `state.paging.modalCompanions = createInitialModalCompanionsInput(state.activeMountainId)`
-- 이후 `renderDetailScreen()`
-
-마찬가지로 동행 필터 칩이 실제 동작하게 될 경우에도 아래 원칙을 따른다.
-
-- 필터 변경
-- 해당 목록 입력을 새로 생성
-- `after = null`
-- 목록만 부분 렌더 또는 전체 렌더
-
-### 5.8 8단계: 생성 함수로 초기 입력 통일
-직접 객체를 여기저기 복사하지 말고 생성 함수를 둔다.
-
-예시:
-
-- `createHomeCompanionInput()`
-- `createCompanionListInput(overrides = {})`
-- `createDetailFeedInput(mountainId)`
-- `createModalCompanionInput(mountainId)`
-
-이렇게 해야 필터 변경과 리셋 로직이 단순해진다.
-
-## 6. 파일별 변경 계획
-
-### 6.1 `/home/user/un-ad/assets/js/app.js`
-핵심 변경 파일이다.
-
-변경 항목:
-
-- `state` 확장
-- input 생성 함수 추가
-- 공통 query/pagination 유틸 추가
-- `renderApp()`를 목록별 input 조회 호출 방식으로 변경
-- `renderDetailScreen()`에서 상세 피드/모달용 input 동기화
-- 이벤트 위임에 페이저 버튼 액션 추가
-- 필터/산 선택 시 input 리셋 로직 추가
-
-추가 권장 함수:
-
-- `createPagingState()`
-- `paginateByInput(items, input)`
-- `queryCompanions(input)`
-- `queryFeeds(input)`
-- `renderPager(targetId, listKey, result)`
-- `rerenderListByKey(listKey)`
-
-### 6.2 `/home/user/un-ad/index.html`
-목록 컨테이너 아래에 pager slot을 추가한다.
-
-우선 대상:
-
-- 홈 동행 목록
-- 전체 동행 목록
-- 홈 피드 목록
-- 상세 피드 목록
-- 모달 동행 목록
-
-예시 변경:
-
-```html
-<div id="companion-list"></div>
-<div id="companion-list-pager" class="pager-slot"></div>
-```
-
-### 6.3 `/home/user/un-ad/assets/css/styles.css`
-페이저 UI 전용 스타일을 추가한다.
-
-필요 스타일:
-
-- `.pager-slot`
-- `.pager`
-- `.pager-button`
-- `.pager-meta`
-- disabled 상태
-- compact 모드
-
-디자인 톤은 기존 서비스의 `forest / ember / cream` 팔레트를 유지한다.
-
-## 7. 제안하는 데이터 계약
-정적 데이터에서 인풋 기반 페이징을 안정적으로 쓰려면 각 아이템에 정렬과 cursor 계산이 가능한 키가 필요하다.
-
-### 7.1 필수 조건
-현재 `companion`, `feed`, `mountain` 데이터에 `id`가 안정적으로 있어야 한다.
-
-만약 일부 항목에 `id`가 없다면 우선 추가해야 한다.
-
-권장 필드:
-
-- `id`: 고유 식별자
-- `createdAt`: 시간순 정렬용
-- `mountainId`: 상세/필터 연결용
-- `tags`: 필터 확장용
-
-### 7.2 초기 커서 전략
-1차 구현은 아래 규칙으로 충분하다.
-
-- `after = null`이면 첫 페이지
-- `after = 마지막으로 받은 항목의 id`
-- 정렬은 `id asc` 또는 `createdAt desc`
-
-실서비스/API 단계에서는 아래처럼 자연스럽게 옮길 수 있다.
-
-```js
-{
-  limit: 10,
-  after: "opaque-cursor-token",
-  filters: { mountainId: "bukhansan" },
-  sort: { field: "createdAt", direction: "desc" }
-}
-```
-
-## 8. 테스트 및 검증 계획
-
-### 8.1 기능 검증
-최소 검증 시나리오는 아래다.
-
-1. 홈 동행 목록 첫 페이지가 2개만 보인다.
-2. `더 보기` 클릭 시 다음 동행이 이어서 보인다.
-3. 상세 산 변경 시 상세 피드가 해당 산 기준 첫 페이지로 리셋된다.
-4. 모달 동행 목록도 현재 산 기준으로 다시 조회된다.
-5. 필터 변경 시 이전 커서가 남지 않는다.
-6. 마지막 페이지에서 `더 보기`가 사라지거나 비활성화된다.
-
-### 8.2 회귀 검증
-현재 상호작용이 깨지지 않아야 한다.
-
-- 산 카드 클릭 시 상세 화면 갱신
-- 좋아요 버튼 동작
-- 참가 신청 모달 동작
-- 상세 탭 전환
-- 모집 폼 검증
-- 하단 내비 전환
-
-### 8.3 구조 검증
-이 단계에서는 최소한 아래를 확인한다.
-
-- `node --check /home/user/un-ad/assets/js/app.js`
-- 각 pager slot이 실제 DOM에 존재하는지 확인
-- 빈 결과일 때 렌더가 깨지지 않는지 확인
-
-## 9. 롤아웃 순서 제안
-한 번에 모든 목록을 바꾸기보다 아래 순서가 안전하다.
-
-1. 공통 input/query/pagination 유틸 도입
-2. 홈 동행 목록 전환
-3. 모달 동행 목록 전환
-4. 상세 피드 전환
-5. 전체 동행 목록 전환
-6. 홈 피드 전환
-7. 필요 시 홈 산 목록까지 확장
-
-이 순서를 추천하는 이유는 다음과 같다.
-
-- 현재 실제로 개수 제한이 있는 목록이 동행 계열부터다.
-- `activeMountainId`와 연동되는 목록을 먼저 정리하면 상태 모델이 안정된다.
-- 피드와 산 목록은 그 다음에 같은 패턴으로 붙일 수 있다.
-
-## 10. 최종 권고
-이 코드베이스에서는 “오프셋 페이징을 인풋 기반으로 바꾼다”는 표현보다, “목록 조회를 인풋 기반 계약으로 재설계한다”가 더 정확하다. 현재는 진짜 오프셋 페이징이 없고, 일부 고정 개수 렌더와 전체 렌더만 존재하기 때문이다.
-
-따라서 구현 우선순위는 아래 한 줄로 정리된다.
-
-- `state`에 목록별 input을 도입하고
-- `query + paginateByInput` 레이어를 만든 뒤
-- 기존 `.slice()`와 전체 배열 전달을 모두 그 레이어 뒤로 숨긴다.
-
-이 구조로 가면 다음 단계에서 실제 백엔드 API가 붙더라도, 프론트엔드는 `input`과 `result.pageInfo` 계약만 유지한 채 데이터 소스만 교체하면 된다. 지금 이 정적 프로토타입에서 먼저 그 경계를 만드는 것이 가장 비용 대비 효과가 크다.
+# SANTA Plan
+
+## 목적
+이 문서는 현재 코드베이스를 기준으로 SANTA를 `등산 정보 + 커뮤니티 + 배지 + 선택적 동행` 구조로 발전시키기 위한 실제 작업 순서를 정리한다.
+
+현재 기준에서 중요한 점은 두 가지다.
+
+- 홈의 산 목록과 커뮤니티 브리핑은 이미 Supabase 읽기 경로가 들어가 있다.
+- 나머지 핵심 상호작용은 아직 더미 데이터 또는 클라이언트 임시 상태에 머물러 있다.
+
+즉 지금 단계의 계획은 `정적 프로토타입을 전부 갈아엎는 것`이 아니라, 이미 들어간 DB 읽기 기반 위에 실제 쓰기와 사용자 데이터를 붙이는 것이다.
+
+## 현재 상태 요약
+
+### 이미 완료된 것
+- 제품 방향을 동행 중심에서 커뮤니티 중심으로 재정의했다.
+- 홈 IA를 `산 탐색 -> 커뮤니티 브리핑 -> 지도 브리핑 -> 선택적 동행` 순서로 재배치했다.
+- 데스크톱 웹에서 더 넓게 보이도록 레이아웃을 확장했다.
+- `mountains`, `routes`, `posts`를 읽는 Supabase 연동 코드를 추가했다.
+- 1단계 코어 DB 스키마와 산/코스 시드 SQL을 추가했다.
+
+### 아직 남아 있는 더미 영역
+- 프로필 화면은 여전히 `APP_DATA.profile`을 사용한다.
+- 동행 데이터는 여전히 `APP_DATA.companions`를 사용한다.
+- 게시글 작성 폼은 DB insert 없이 토스트만 띄운다.
+- 좋아요는 클라이언트에서 숫자만 토글한다.
+- 저장 버튼은 아직 실제 `bookmarks`와 연결되지 않았다.
+- 활동 기록, 배지 자동 지급, 동행 모듈은 아직 미구현이다.
+
+## 우선순위 원칙
+- 메인 경험을 먼저 고친다: 산, 코스, 게시글, 프로필.
+- 쓰기 기능을 읽기 기능 다음에 붙인다.
+- 동행은 끝까지 별도 모듈로 유지한다.
+- `APP_DATA`는 한 번에 제거하지 않고, 화면별로 DB로 치환한다.
+
+## 단계별 실행 계획
+
+## Phase 1. DB 읽기 기반 안정화
+목표는 홈과 상세에서 더미 의존성을 줄이고, DB가 비어 있어도 앱이 무너지지 않게 만드는 것이다.
+
+### 작업
+- `mountains`, `routes`, `posts` 조회 실패/빈 상태 메시지를 지금보다 더 명확히 정리한다.
+- 산 상세 화면에서 DB 기반 산만 선택해도 깨지지 않도록 필드 fallback을 점검한다.
+- 시작 시 토스트가 여러 번 뜨는 흐름을 정리한다.
+- `APP_DATA`를 `fallback seed`라는 개념으로 문서화한다.
+
+### 완료 기준
+- Supabase 설정이 있을 때 홈과 상세가 모두 DB 데이터 중심으로 동작한다.
+- Supabase 설정이 없을 때는 샘플 데이터로 안정적으로 시연된다.
+
+## Phase 2. 커뮤니티 쓰기 기능 연결
+목표는 커뮤니티를 진짜 서비스처럼 작동하게 만드는 것이다.
+
+### 작업
+- 작성 폼을 `posts` insert로 연결한다.
+- 이미지 업로드가 없더라도 텍스트 게시글 작성이 가능하도록 최소 흐름부터 붙인다.
+- `comments` 작성과 조회를 연결한다.
+- `post_likes`를 실제 토글로 바꾸고 `like_count` 반영을 확인한다.
+- `bookmarks`를 산/게시글 저장에 연결한다.
+
+### 완료 기준
+- 로그인한 사용자가 글을 작성할 수 있다.
+- 좋아요, 댓글, 저장이 실제 DB에 반영된다.
+- 홈 커뮤니티 브리핑과 상세 커뮤니티 탭이 실제 신규 데이터 변화를 보여준다.
+
+## Phase 3. 프로필과 배지 연결
+목표는 SANTA의 차별화 포인트인 기록 자부심을 눈에 보이게 만드는 것이다.
+
+### 작업
+- `profiles`를 읽어 현재 프로필 화면을 더미 대신 실제 사용자 데이터로 바꾼다.
+- `user_badges`와 `badges`를 읽어 대표 배지와 전체 배지 목록을 렌더링한다.
+- 프로필 상단의 닉네임, 지역, 레벨, 소개를 `profiles`에서 가져오도록 바꾼다.
+- 초기에는 수동 지급 배지부터 연결하고, 자동 지급은 뒤로 미룬다.
+
+### 완료 기준
+- 회원가입 후 생성된 `profiles` 정보가 앱 프로필에 보인다.
+- 배지 1개 이상이 실제 DB 기준으로 노출된다.
+
+## Phase 4. 활동 기록 도입
+목표는 후기와 배지의 근거 데이터를 만들기 시작하는 것이다.
+
+### 작업
+- `activities`, `activity_tracks` 테이블을 추가한다.
+- 산행 기록 입력 최소 모델을 만든다.
+- 게시글이 특정 활동을 선택적으로 참조할 수 있게 확장한다.
+- 배지 지급 조건에서 활동 수 기반 지급을 검토한다.
+
+### 완료 기준
+- 최소 1개의 산행 기록이 저장되고, 게시글과 연결할 수 있다.
+
+## Phase 5. 선택적 동행 모듈 분리
+목표는 동행을 메인 흐름을 해치지 않는 보조 기능으로 붙이는 것이다.
+
+### 작업
+- `meetups`, `meetup_members`, `meetup_messages`를 도입한다.
+- 현재 `companions` UI를 `meetups` 중심 화면으로 교체한다.
+- 동행 개설 조건에 신뢰 기준이나 후기 기준을 붙일지 결정한다.
+- 신고, 차단, 동행 후기 구조를 이후 단계로 설계한다.
+
+### 완료 기준
+- 산 상세나 커뮤니티 맥락 안에서만 동행 진입이 가능하다.
+- 동행이 홈의 메인 가치를 가리지 않는다.
+
+## 코드 기준 즉시 수정 후보
+
+### 유지할 것
+- `mountains/routes/posts`를 DB 응답에서 화면 모델로 바꾸는 매퍼 구조
+- 홈과 상세 중심 IA
+- 샘플 데이터 기반 시연 fallback
+
+### 빠르게 손볼 것
+- `renderProfile()`의 더미 의존성
+- `screen-create`의 실DB 미연결 상태
+- 좋아요/저장 버튼의 비영속 동작
+- `companions` 카피와 샘플 데이터가 아직 너무 메인처럼 보이는 부분
+
+### 나중에 정리할 것
+- `APP_DATA` 내부의 과한 프레젠테이션 전용 필드
+- 단일 파일에 몰려 있는 렌더 문자열
+- 프로필/커뮤니티/지도 탭의 점진적 모듈 분리
+
+## 초보자용 실제 작업 순서
+1. `assets/js/supabase-config.js`에 실제 Supabase URL과 anon key를 넣는다.
+2. Supabase SQL Editor에서 `202604020001_phase1_core.sql`을 실행한다.
+3. 이어서 `202604020002_seed_mountains_routes.sql`을 실행한다.
+4. 홈 산 목록이 실제 DB에서 오는지 먼저 확인한다.
+5. `posts` 샘플 데이터를 DB에 넣고 홈 커뮤니티 브리핑이 바뀌는지 확인한다.
+6. 그 다음 작성 폼을 `posts` insert와 연결한다.
+7. 좋아요와 저장을 연결한다.
+8. 마지막으로 프로필과 배지를 연결한다.
+
+## 이번 저장소에서 가장 먼저 할 다음 작업
+현재 코드 상태에서 가장 가치가 큰 다음 작업은 아래 순서다.
+
+1. `posts` 시드 추가
+2. 게시글 작성 폼 DB 연결
+3. `post_likes`와 `bookmarks` 연결
+4. 프로필 `profiles/user_badges` 연결
+
+이 순서가 중요한 이유는, SANTA의 성장 엔진이 동행이 아니라 커뮤니티이기 때문이다.

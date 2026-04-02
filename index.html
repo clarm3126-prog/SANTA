@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SANTA (산타) | 안전 기반 등산 동행 플랫폼</title>
+  <title>SANTA (산타) | 등산 커뮤니티 · 코스 탐색 · 안전 동행</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -15,48 +15,48 @@
       <div class="eyebrow">산행 시장 분석 반영 · 웹 MVP 프로토타입</div>
       <h1 class="brand">SANTA <span>(산타)</span></h1>
       <p class="summary">
-        이 시안은 단순한 등산 SNS가 아니라
-        <strong>정확한 코스 탐색 + 구조화된 후기 + 안전 기반 동행 매칭</strong>
+        이 시안은 단순한 동행 앱이 아니라
+        <strong>등산 커뮤니티 + 지도 기반 코스 탐색 + 필요할 때 쓰는 안전 동행</strong>
         을 한 화면 안에 묶는 방향으로 다시 정리했습니다.
       </p>
 
       <div class="insight-grid">
         <section class="insight-card">
           <div class="insight-value">Core 1</div>
-          <div class="insight-label">램블러형 탐색 정확도에 가까운 코스 탐색과 위험 구간 요약</div>
+          <div class="insight-label">오늘 갈 산을 결정하게 해주는 지도 기반 코스 탐색과 입구별 브리핑</div>
         </section>
         <section class="insight-card">
           <div class="insight-value">Core 2</div>
-          <div class="insight-label">인스타형 피드가 아니라 산행 의사결정에 필요한 구조화된 후기</div>
+          <div class="insight-label">예쁜 사진보다 먼저 보이는 최근 7일 후기, 질문, 위험 구간 커뮤니케이션</div>
         </section>
         <section class="insight-card">
           <div class="insight-value">Core 3</div>
-          <div class="insight-label">소개팅이 아니라 그룹 중심의 안전 동행 매칭</div>
+          <div class="insight-label">동행은 메인이 아니라 산별 커뮤니티가 활성화된 뒤 자연스럽게 붙는 부가 기능</div>
         </section>
         <section class="insight-card">
           <div class="insight-value">Core 4</div>
-          <div class="insight-label">실명 인증, 후기, 위치 공유, 귀가 체크를 기본 UX로 노출</div>
+          <div class="insight-label">실명 인증, 후기 신뢰도, 위치 공유, 귀가 체크를 동행 전환 순간에 강하게 노출</div>
         </section>
       </div>
 
       <div class="principles">
         <article class="principle">
           <div class="principle-title">포지셔닝 수정</div>
-          <div class="principle-body">데이트 느낌을 전면에 두지 않고, 초보도 안심하고 참여할 수 있는 소규모 동행 플랫폼으로 표현을 정리했습니다.</div>
+          <div class="principle-body">동행을 첫 화면의 이유로 두지 않고, 산행 전 판단과 산행 후 대화가 가장 잘 되는 커뮤니티 서비스로 표현을 정리했습니다.</div>
         </article>
         <article class="principle">
-          <div class="principle-title">코드 구조 개선</div>
-          <div class="principle-body">내비게이션, 탭, 피드 카드, 동행 모집글을 하드코딩하지 않고 데이터 기반으로 렌더링하도록 구조를 바꿨습니다.</div>
+          <div class="principle-title">정보 구조 수정</div>
+          <div class="principle-body">홈 진입 순서를 산 탐색, 커뮤니티 브리핑, 지도 체크, 동행 보조 기능으로 재정렬해 실제 획득 흐름에 맞췄습니다.</div>
         </article>
         <article class="principle">
           <div class="principle-title">웹 우선 UX</div>
-          <div class="principle-body">모바일 앱 셸은 유지하되 데스크톱에서도 전략과 프로토타입을 동시에 검토할 수 있도록 양쪽 레이아웃으로 구성했습니다.</div>
+          <div class="principle-body">모바일 앱 셸은 유지하되 데스크톱에서도 전략, 커뮤니티 구조, 산 상세 탐색 흐름을 함께 검토할 수 있도록 양쪽 레이아웃으로 구성했습니다.</div>
         </article>
       </div>
 
       <div class="desktop-notes">
-        <div><strong>왜 이 방향이 맞는가:</strong> 등산은 기록앱만으로 차별화하기 어렵고, 안전과 사람 연결을 동시에 해결해야 전환 이유가 생깁니다.</div>
-        <div><strong>이 단계의 의미:</strong> 다음 React 전환 전에 더미 데이터를 한곳에 모아 상태와 렌더링 구조를 먼저 검증합니다.</div>
+        <div><strong>왜 이 방향이 맞는가:</strong> 사용자는 먼저 산과 코스를 결정하고, 그다음 최근 후기와 질문을 보고, 마지막에 필요하면 동행을 찾습니다.</div>
+        <div><strong>이 단계의 의미:</strong> 다음 React 전환 전에 커뮤니티 중심 IA와 지도형 상세 구조가 실제 화면에서 설득력 있는지 먼저 검증합니다.</div>
       </div>
     </aside>
 
@@ -72,7 +72,7 @@
             <div class="hero-top">
               <div>
                 <div class="app-wordmark">山<span>友</span></div>
-                <div class="app-sub">정확하게 찾고, 안전하게 같이 오른다</div>
+                <div class="app-sub">등산 전에 보고, 산에서 나누고, 필요하면 함께 간다</div>
               </div>
               <div class="profile-btn" data-go="profile" style="position: relative;">
                 🧗
@@ -80,11 +80,11 @@
               </div>
             </div>
 
-            <div class="hero-badge">🛡 그룹 동행 기본 · 실명 인증 · 귀가 체크</div>
+            <div class="hero-badge">🗺 코스 브리핑 · 💬 실전 커뮤니티 · 🛡 안전 동행</div>
 
             <div class="quick-safety">
-              <div class="quick-pill">실시간 혼잡도</div>
-              <div class="quick-pill">최근 7일 후기</div>
+              <div class="quick-pill">입구별 코스</div>
+              <div class="quick-pill">최근 7일 대화</div>
               <div class="quick-pill">위험 구간 알림</div>
             </div>
 
@@ -99,17 +99,17 @@
               <button class="tag active" type="button">전체</button>
               <button class="tag" type="button">🌅 일출</button>
               <button class="tag" type="button">🔰 초보</button>
-              <button class="tag" type="button">👥 소규모</button>
+              <button class="tag" type="button">💬 질문 많음</button>
               <button class="tag" type="button">📸 뷰맛집</button>
-              <button class="tag" type="button">🚶 혼산 대비</button>
+              <button class="tag" type="button">🗺 입구 쉬움</button>
               <button class="tag" type="button">⚡ 도전</button>
             </div>
 
             <div class="announcement-banner">
               <div class="ab-icon">🧭</div>
               <div>
-                <div class="ab-title">이번 주 MVP 핵심 지표</div>
-                <div class="ab-text">북한산, 관악산, 청계산 중심으로 최근 후기와 안전 동행 수요를 먼저 밀도 있게 쌓습니다.</div>
+                <div class="ab-title">이번 주 커뮤니티 집중 산</div>
+                <div class="ab-text">북한산, 관악산, 청계산 중심으로 최근 후기, 코스 질문, 입구별 지도 메모를 먼저 밀도 있게 쌓습니다.</div>
               </div>
             </div>
 
@@ -120,16 +120,22 @@
             <div class="mountain-scroll" id="home-mountain-list"></div>
 
             <div class="section-head">
-              <div class="section-title">👥 안전 동행 모집</div>
-              <div class="section-more" data-go="companion">더보기</div>
-            </div>
-            <div id="home-companion-list"></div>
-
-            <div class="section-head">
-              <div class="section-title">📸 최근 7일 피드</div>
-              <div class="section-more">실전 후기</div>
+              <div class="section-title">💬 실전 커뮤니티 브리핑</div>
+              <div class="section-more" data-go="companion">전체 보기</div>
             </div>
             <div id="home-feed-list"></div>
+
+            <div class="section-head">
+              <div class="section-title">🗺 지도 기반 코스 체크</div>
+              <div class="section-more" data-go="detail">산 상세 보기</div>
+            </div>
+            <div class="map-brief-grid" id="home-map-list"></div>
+
+            <div class="section-head">
+              <div class="section-title">👥 필요하면 같이 가기</div>
+              <div class="section-more" data-go="companion">보조 기능</div>
+            </div>
+            <div id="home-companion-list"></div>
 
             <div style="height: 18px;"></div>
           </div>
@@ -140,8 +146,8 @@
               <div class="nav-label">홈</div>
             </div>
             <div class="nav-item" data-go="companion">
-              <div class="nav-icon">👥</div>
-              <div class="nav-label">동행</div>
+              <div class="nav-icon">💬</div>
+              <div class="nav-label">커뮤니티</div>
             </div>
             <div class="nav-item" data-go="detail">
               <div class="nav-icon">🗺</div>
@@ -156,27 +162,32 @@
 
         <section class="screen" id="screen-companion">
           <div class="screen-header">
-            <div class="sh-title">동행 모집</div>
-            <div class="sh-sub">소개팅이 아니라 안전한 그룹 산행 매칭</div>
+            <div class="sh-title">커뮤니티</div>
+            <div class="sh-sub">산별 질문, 최근 후기, 지도 메모가 먼저 보입니다</div>
           </div>
 
-          <button class="create-post-btn" type="button" data-go="create">✏️ 동행 모집글 올리기</button>
+          <button class="create-post-btn" type="button" data-go="create">✏️ 후기 · 질문 · 동행 글 올리기</button>
 
           <div class="filter-row">
             <button class="filter-chip on" type="button">전체</button>
-            <button class="filter-chip" type="button">🟢 초보</button>
-            <button class="filter-chip" type="button">이번 주말</button>
-            <button class="filter-chip" type="button">📸 사진</button>
-            <button class="filter-chip" type="button">👥 4인 이하</button>
-            <button class="filter-chip" type="button">✅ 인증 호스트</button>
+            <button class="filter-chip" type="button">🟢 초보 질문</button>
+            <button class="filter-chip" type="button">🗺 길찾기</button>
+            <button class="filter-chip" type="button">⚠ 위험 구간</button>
+            <button class="filter-chip" type="button">📸 후기</button>
+            <button class="filter-chip" type="button">👥 동행</button>
           </div>
 
           <div class="scroll-area" style="padding-top:12px;">
             <article class="brief-card" style="margin: 0 20px 12px;">
               <div class="brief-title">운영 원칙</div>
-              <div class="brief-body">기본 추천은 3~5명 그룹입니다. 참가 신청 전 프로필, 후기, 산행 목적을 확인하고, 산행 중에는 위치 공유와 귀가 체크를 사용합니다.</div>
+              <div class="brief-body">커뮤니티 글과 질문이 기본입니다. 동행은 후기와 신뢰가 쌓인 뒤 보조 기능으로 연결되며, 산별 정보와 실전 팁이 먼저 노출됩니다.</div>
             </article>
             <div id="companion-list"></div>
+            <div class="section-head">
+              <div class="section-title">👥 이번 주 소규모 동행</div>
+              <div class="section-more" data-go="create">글 쓰기</div>
+            </div>
+            <div id="community-companion-list"></div>
             <div style="height: 18px;"></div>
           </div>
 
@@ -186,8 +197,8 @@
               <div class="nav-label">홈</div>
             </div>
             <div class="nav-item active" data-go="companion">
-              <div class="nav-icon">👥</div>
-              <div class="nav-label">동행</div>
+              <div class="nav-icon">💬</div>
+              <div class="nav-label">커뮤니티</div>
             </div>
             <div class="nav-item" data-go="detail">
               <div class="nav-icon">🗺</div>
@@ -205,8 +216,8 @@
           <div class="detail-stats-row" id="detail-stats"></div>
 
           <div class="detail-tabs">
-            <button class="dtab active" type="button" data-tab="tab-routes">코스</button>
-            <button class="dtab" type="button" data-tab="tab-feed">피드</button>
+            <button class="dtab active" type="button" data-tab="tab-routes">지도</button>
+            <button class="dtab" type="button" data-tab="tab-feed">커뮤니티</button>
             <button class="dtab" type="button" data-tab="tab-info">정보</button>
           </div>
 
@@ -214,7 +225,7 @@
             <div id="tab-routes" class="tab-panel">
               <div id="detail-live-summary"></div>
               <div id="detail-routes"></div>
-              <button class="create-post-btn" type="button" style="margin-top: 8px;" data-go="create">👥 이 산에서 동행 찾기</button>
+              <button class="create-post-btn" type="button" style="margin-top: 8px;" data-go="create">✍️ 이 산 이야기 남기기</button>
               <div style="height:18px;"></div>
             </div>
 
@@ -233,8 +244,8 @@
               <div class="nav-label">홈</div>
             </div>
             <div class="nav-item" data-go="companion">
-              <div class="nav-icon">👥</div>
-              <div class="nav-label">동행</div>
+              <div class="nav-icon">💬</div>
+              <div class="nav-label">커뮤니티</div>
             </div>
             <div class="nav-item active" data-go="detail">
               <div class="nav-icon">🗺</div>
@@ -251,8 +262,8 @@
           <div class="screen-header" style="display:flex; align-items:center; gap:12px;">
             <div data-go="companion" style="cursor:pointer; font-size:20px; opacity:0.78;">←</div>
             <div>
-              <div class="sh-title">동행 모집 올리기</div>
-              <div class="sh-sub">처음부터 안전 규칙이 보이는 모집글</div>
+              <div class="sh-title">게시글 올리기</div>
+              <div class="sh-sub">후기, 질문, 동행 글을 한곳에서 작성합니다</div>
             </div>
           </div>
 
@@ -261,7 +272,7 @@
               <div class="brief-grid">
                 <article class="brief-card">
                   <div class="brief-title">작성 원칙</div>
-                  <div class="brief-body">MVP에서는 1:1 소개팅형 모집보다 3~5명 그룹 산행을 기본값으로 둡니다. 목적, 난이도, 위치 공유 여부를 반드시 노출합니다.</div>
+                  <div class="brief-body">기본값은 후기와 질문입니다. 함께 갈 사람을 찾고 싶다면 글 유형에서 동행을 선택하고, 산행 목적과 안전 정보를 함께 적습니다.</div>
                 </article>
               </div>
 
@@ -281,67 +292,68 @@
                 </div>
 
                 <div class="form-group" style="margin-top: 18px;">
-                  <label for="post-title">📝 모집 제목</label>
-                  <input id="post-title" type="text" class="form-input" placeholder="예: 이번 주말 북한산 초보 코스 같이 가실 분">
+                  <label for="post-title">📝 제목</label>
+                  <input id="post-title" type="text" class="form-input" placeholder="예: 북한산 불광능선 초보도 괜찮을까요?">
                 </div>
 
                 <div class="form-group" style="margin-top: 18px;">
-                  <label for="meeting-time">📅 날짜 & 시간</label>
+                  <label for="meeting-time">📅 산행 날짜 & 시간</label>
                   <input id="meeting-time" type="datetime-local" class="form-input">
                 </div>
 
                 <div class="form-group" style="margin-top: 18px;">
-                  <label for="meeting-point">📍 집합 장소</label>
-                  <input id="meeting-point" type="text" class="form-input" placeholder="예: 불광역 3번 출구">
+                  <label for="meeting-point">📍 코스 / 출발 지점</label>
+                  <input id="meeting-point" type="text" class="form-input" placeholder="예: 불광역 3번 출구, 불광능선 입구">
                 </div>
 
                 <div class="form-group" style="margin-top: 18px;">
-                  <label for="group-size">👥 모집 인원</label>
+                  <label for="group-size">📂 글 유형</label>
                   <select id="group-size" class="form-input">
-                    <option value="">인원 수를 선택하세요</option>
-                    <option>3명 (현재 1명 포함)</option>
-                    <option>4명 (현재 1명 포함)</option>
-                    <option>5명 (현재 1명 포함)</option>
-                    <option>6명 (현재 1명 포함)</option>
+                    <option value="">글 유형을 선택하세요</option>
+                    <option>후기</option>
+                    <option>질문</option>
+                    <option>지도 메모</option>
+                    <option>정보 공유</option>
+                    <option>동행 모집</option>
                   </select>
                 </div>
 
                 <div class="form-group" style="margin-top: 18px;">
-                  <label>🎯 산행 목적</label>
+                  <label>🎯 글 주제</label>
                   <div class="option-grid" data-multi-group="intent">
-                    <button class="option-btn selected" type="button">🌿 힐링 / 산책</button>
-                    <button class="option-btn" type="button">💪 운동 / 도전</button>
+                    <button class="option-btn selected" type="button">🗺 길찾기</button>
+                    <button class="option-btn" type="button">💬 질문</button>
                     <button class="option-btn" type="button">📸 사진 / 뷰</button>
-                    <button class="option-btn" type="button">🌅 일출 / 일몰</button>
-                    <button class="option-btn" type="button">🍜 맛집 탐방</button>
-                    <button class="option-btn" type="button">🔰 초보 체험</button>
+                    <button class="option-btn" type="button">⚠ 주의 구간</button>
+                    <button class="option-btn" type="button">👥 동행</button>
+                    <button class="option-btn" type="button">🔰 초보 팁</button>
                   </div>
                 </div>
 
                 <div class="form-group" style="margin-top: 18px;">
-                  <label>📊 난이도</label>
+                  <label>📊 난이도 / 톤</label>
                   <div class="option-grid" data-single-group="level">
-                    <button class="option-btn selected" type="button">🟢 완전 초보</button>
-                    <button class="option-btn" type="button">🟡 약간 경험 있음</button>
-                    <button class="option-btn" type="button">🟠 중급자</button>
-                    <button class="option-btn" type="button">🔴 고급자</button>
+                    <button class="option-btn selected" type="button">🟢 입문 정보</button>
+                    <button class="option-btn" type="button">🟡 가벼운 코스</button>
+                    <button class="option-btn" type="button">🟠 중급 코스</button>
+                    <button class="option-btn" type="button">🔴 도전 코스</button>
                   </div>
                 </div>
 
                 <div class="form-group" style="margin-top: 18px;">
-                  <label for="description">💬 상세 소개</label>
-                  <textarea id="description" class="form-input" rows="4" style="resize:none;" placeholder="코스 정보, 중간 체크포인트, 위치 공유 여부, 하산 후 계획 등을 적어주세요"></textarea>
+                  <label for="description">💬 상세 내용</label>
+                  <textarea id="description" class="form-input" rows="4" style="resize:none;" placeholder="최근 코스 상태, 입구 팁, 위험 구간, 질문 내용, 동행 조건 등을 적어주세요"></textarea>
                 </div>
 
                 <div class="form-tip" style="margin-top: 18px;">
                   ⚠ <strong style="color: var(--ember);">안전 안내</strong><br>
-                  참가자 프로필과 후기를 꼭 확인하세요. 모든 참가자는 실명 인증이 필요하며, 위치 공유와 귀가 체크를 켜면 모집글 신뢰도가 올라갑니다.
+                  지도 정보와 최근 후기를 함께 적을수록 글 신뢰도가 올라갑니다. 동행 글은 실명 인증과 위치 공유, 귀가 체크 정보를 함께 노출하는 것을 권장합니다.
                 </div>
 
                 <div id="form-validation" class="validation-message" style="margin-top: 12px;"></div>
 
                 <div style="margin-top: 18px;">
-                  <button class="submit-btn" type="submit">🚀 동행 모집 올리기</button>
+                  <button class="submit-btn" type="submit">🚀 게시글 올리기</button>
                 </div>
               </form>
             </div>
@@ -364,7 +376,7 @@
               </div>
               <div class="ps-item">
                 <div class="ps-val">12</div>
-                <div class="ps-key">동행 경험</div>
+                <div class="ps-key">작성한 글</div>
               </div>
               <div class="ps-item">
                 <div class="ps-val">156</div>
@@ -428,8 +440,8 @@
               <div class="nav-label">홈</div>
             </div>
             <div class="nav-item" data-go="companion">
-              <div class="nav-icon">👥</div>
-              <div class="nav-label">동행</div>
+              <div class="nav-icon">💬</div>
+              <div class="nav-label">커뮤니티</div>
             </div>
             <div class="nav-item" data-go="detail">
               <div class="nav-icon">🗺</div>
@@ -450,8 +462,8 @@
       <div class="modal-handle"></div>
       <div class="modal-title">👥 동행 신청하기</div>
       <div class="modal-copy">
-        이 서비스는 소개팅이 아니라 안전한 그룹 산행을 위한 플랫폼입니다.
-        신청 전에 호스트 후기, 코스 난이도, 위치 공유 여부를 확인하세요.
+        이 서비스의 기본은 산별 커뮤니티이며, 동행은 필요할 때 쓰는 보조 기능입니다.
+        신청 전에 최근 후기, 코스 난이도, 위치 공유 여부를 확인하세요.
       </div>
       <article class="brief-card">
         <div class="brief-title">참가 조건 확인</div>
@@ -482,8 +494,8 @@
       <div class="modal-handle"></div>
       <div class="modal-title">🏔 이 산 같이 가실 분?</div>
       <div class="modal-copy" id="modal-companion-copy">
-        북한산 관련 동행 모집 게시글이 현재 <strong style="color: var(--ember);">3건</strong> 있습니다.
-        기본 추천은 3~5명 그룹이며, 실명 인증 호스트를 우선 노출합니다.
+        북한산 커뮤니티에서 동행으로 전환된 글이 현재 <strong style="color: var(--ember);">3건</strong> 있습니다.
+        기본 추천은 3~5명 그룹이며, 후기와 신뢰도가 높은 호스트를 우선 노출합니다.
       </div>
       <div id="modal-companion-list"></div>
       <button class="submit-btn" type="button" id="view-companions-btn">전체 동행 보기</button>
@@ -493,6 +505,12 @@
 
   <div class="toast" id="toast"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./assets/js/supabase-config.js"></script>
+  <script>
+    window.SANTA_SUPABASE_URL = window.SANTA_SUPABASE_URL || "";
+    window.SANTA_SUPABASE_ANON_KEY = window.SANTA_SUPABASE_ANON_KEY || "";
+  </script>
   <script src="./assets/js/app.js"></script>
 </body>
 </html>

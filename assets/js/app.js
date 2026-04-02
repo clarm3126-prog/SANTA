@@ -15,7 +15,10 @@ const APP_DATA = {
         { value: "보통", key: "📊 혼잡도" },
         { value: "12°C", key: "🌤 기온" }
       ],
-      liveSummary: "현재 정상 혼잡도는 보통이며, 3.2km 암릉 구간은 바람이 강합니다. 오늘 방문 예상자 47명, 그룹 산행 비중이 높습니다.",
+      liveSummary: "현재 정상 혼잡도는 보통이며, 3.2km 암릉 구간은 바람이 강합니다. 오늘 방문 예상자 47명, 질문 게시글은 불광능선 입구와 암릉 구간에 집중됩니다.",
+      entryPoint: "불광역 2번 출구 · 불광탐방지원센터",
+      mapNote: "초보는 불광능선, 경험자는 의상능선이 많이 선택됩니다. 3.2km 암릉은 바람과 미끄럼 질문이 반복됩니다.",
+      communityPulse: "오늘 커뮤니티 메모 18건 · 길찾기 질문 6건",
       routes: [
         {
           name: "🌿 불광능선 코스",
@@ -79,7 +82,10 @@ const APP_DATA = {
         { value: "낮음", key: "📊 혼잡도" },
         { value: "14°C", key: "🌤 기온" }
       ],
-      liveSummary: "서울대입구 코스 기준 안내 표지판이 잘 되어 있고, 주말 오전에는 초보 그룹 산행 수요가 높습니다.",
+      liveSummary: "서울대입구 코스 기준 안내 표지판이 잘 되어 있고, 주말 오전에는 초보 질문과 입구 확인 글이 가장 많이 올라옵니다.",
+      entryPoint: "서울대입구역 · 관악산공원 입구",
+      mapNote: "서울대입구 코스는 입문자 질문이 많고, 연주대 코스는 계단 체감 난이도와 하산 시간 문의가 잦습니다.",
+      communityPulse: "오늘 커뮤니티 메모 11건 · 초보 질문 5건",
       routes: [
         {
           name: "🌿 서울대입구 코스",
@@ -129,7 +135,10 @@ const APP_DATA = {
         { value: "보통", key: "📊 혼잡도" },
         { value: "13°C", key: "🌤 기온" }
       ],
-      liveSummary: "입문자 비중이 높고, 매바위 코스는 길 안내가 비교적 명확합니다. 하산 후 카페 거리 연계 수요가 큽니다.",
+      liveSummary: "입문자 비중이 높고, 매바위 코스는 길 안내가 비교적 명확합니다. 최근 글은 입구 동선과 하산 동선 공유 비중이 큽니다.",
+      entryPoint: "청계산입구역 · 원터골 입구",
+      mapNote: "원터골 코스는 처음 가는 사람에게 가장 많이 추천되며, 카페 거리와 연계된 후기가 많습니다.",
+      communityPulse: "오늘 커뮤니티 메모 9건 · 후기 4건",
       routes: [
         {
           name: "🌿 원터골 코스",
@@ -163,7 +172,10 @@ const APP_DATA = {
         { value: "높음", key: "📊 혼잡도" },
         { value: "15°C", key: "🌤 기온" }
       ],
-      liveSummary: "퇴근 후 가벼운 산행과 야경 수요가 많습니다. 짧은 시간 입문 그룹 코스로 적합합니다.",
+      liveSummary: "퇴근 후 가벼운 산행과 야경 수요가 많습니다. 최근 글은 야간 동선, 혼잡 시간, 사진 포인트 공유가 중심입니다.",
+      entryPoint: "아차산역 · 해맞이광장 입구",
+      mapNote: "짧은 코스지만 저녁 시간 혼잡이 빠르게 올라옵니다. 야간 하산 동선 공유 글이 자주 올라옵니다.",
+      communityPulse: "오늘 커뮤니티 메모 7건 · 야경 후기 3건",
       routes: [
         {
           name: "🌆 야경 코스",
@@ -191,7 +203,7 @@ const APP_DATA = {
       name: "민준이",
       meta: "산행 23회 · 후기 19개 · 실명 인증",
       trust: "매너 4.9",
-      title: "이번 주말 북한산 의상능선 소규모 4인 동행",
+      title: "북한산 의상능선 소규모 4인 동행",
       tags: ["🔰 초보 환영", "📸 사진", "☕ 하산 카페", "🛡 위치 공유 필수"],
       note: "집합 후 1차 인원 확인, 중간 체크포인트 2회, 하산 완료 체크까지 진행합니다.",
       people: ["👩", "🧑"],
@@ -205,7 +217,7 @@ const APP_DATA = {
       name: "수아 언니",
       meta: "등산 가이드 · 후기 34개 · 여성 호스트 인증",
       trust: "가이드 5.0",
-      title: "관악산 입문자 그룹 산행, 처음인 분 우선",
+      title: "관악산 입문자 그룹 산행",
       tags: ["🌿 힐링", "👶 완전 초보", "🍜 맛집", "👥 최대 5명"],
       note: "속도 느린 참가자 기준으로 운영하고, 초반 30분은 장비와 보행 요령을 같이 확인합니다.",
       people: ["👩", "🧑", "👴"],
@@ -219,7 +231,7 @@ const APP_DATA = {
       name: "도봉산킹",
       meta: "산행 67회 · 후기 8개 · 실명 인증",
       trust: "도전 4.7",
-      title: "도봉산 자운봉 도전 코스, 중급 이상 소규모 모집",
+      title: "도봉산 자운봉 도전 코스 소규모 모집",
       tags: ["⚡ 도전", "🌄 일출", "👥 소규모", "🔺 중급 이상"],
       note: "우천 시 자동 취소, 구조 연락처 공유, 집합 시 장비 체크를 진행합니다.",
       people: ["🧑"],
@@ -237,7 +249,7 @@ const APP_DATA = {
       visualIcon: "🏔",
       visualText: "정상 인증샷",
       mountainLabel: "북한산 백운대 836m",
-      description: "오늘 의상능선은 뷰가 정말 좋았고, 3.2km 암릉 구간은 바람이 강해서 초보자면 천천히 가는 게 좋았습니다.",
+      description: "오늘 의상능선은 뷰가 좋았지만 3.2km 암릉 구간은 바람이 강했습니다. 초보라면 불광능선으로 올라가고, 의상능선은 하산 전에 체력 여유를 꼭 확인하는 편이 안전합니다.",
       reviewItems: [
         { label: "⚠ 길 헷갈린 구간", value: "1.2km 삼거리 우회로" },
         { label: "👥 정상 혼잡도", value: "보통 (오전 10시)" },
@@ -256,7 +268,7 @@ const APP_DATA = {
       visualIcon: "🌿",
       visualText: "청계산 매바위",
       mountainLabel: "청계산 매바위",
-      description: "초보 코스로 좋았고 입구에서부터 표지판이 명확했습니다. 혼자보다 3인 정도 그룹으로 가면 더 편안할 코스예요.",
+      description: "원터골 입구 기준 표지판이 명확했고, 초보가 길 찾기 어렵지 않았습니다. 매바위 쪽은 중간 쉼 포인트가 분명해서 입문자 질문에 답하기 좋은 코스였습니다.",
       reviewItems: [
         { label: "💪 난이도 체감", value: "생각보다 쉬움" },
         { label: "🚌 교통", value: "청계산입구역 도보 15분" },
@@ -275,7 +287,7 @@ const APP_DATA = {
       visualIcon: "🌇",
       visualText: "연주대 전망",
       mountainLabel: "관악산 연주대",
-      description: "서울대입구 코스는 처음 가는 사람도 따라가기 쉬웠고, 4명 정도 그룹으로 움직이니 체감 난이도가 낮았습니다.",
+      description: "서울대입구 코스는 처음 가는 사람도 따라가기 쉬웠고, 초반 계단 구간 이후에는 길이 단순했습니다. 입문자라면 오전 9시 이전 출발이 혼잡도와 체력 면에서 유리합니다.",
       reviewItems: [
         { label: "👶 초보 적합도", value: "높음" },
         { label: "📍 주의 포인트", value: "암반 계단 구간" },
@@ -301,8 +313,17 @@ const APP_DATA = {
   }
 };
 
+const runtimeData = JSON.parse(JSON.stringify(APP_DATA));
+const mountainFallbackByName = Object.fromEntries(APP_DATA.mountains.map((mountain, index) => [mountain.name, { ...mountain, defaultOrder: index + 1 }]));
+const supabaseUrl = window.SANTA_SUPABASE_URL || "";
+const supabaseAnonKey = window.SANTA_SUPABASE_ANON_KEY || "";
+const supabaseClient = window.supabase && supabaseUrl && supabaseAnonKey
+  ? window.supabase.createClient(supabaseUrl, supabaseAnonKey)
+  : null;
+
 const state = {
-  activeMountainId: "bukhansan"
+  activeMountainId: "bukhansan",
+  mountainSearch: ""
 };
 
 const screens = [...document.querySelectorAll(".screen")];
@@ -402,11 +423,11 @@ function validateCompanionForm() {
 
   const missing = [];
   if (!mountain) missing.push("산 선택");
-  if (!title) missing.push("모집 제목");
-  if (!meetingTime) missing.push("날짜와 시간");
-  if (!meetingPoint) missing.push("집합 장소");
-  if (!groupSize) missing.push("모집 인원");
-  if (!description) missing.push("상세 소개");
+  if (!title) missing.push("제목");
+  if (!meetingTime) missing.push("산행 날짜와 시간");
+  if (!meetingPoint) missing.push("코스 또는 출발 지점");
+  if (!groupSize) missing.push("글 유형");
+  if (!description) missing.push("상세 내용");
 
   if (missing.length) {
     validationMessage.textContent = `다음 항목을 입력해 주세요: ${missing.join(", ")}`;
@@ -418,21 +439,379 @@ function validateCompanionForm() {
   return true;
 }
 
+function getMountains() {
+  return runtimeData.mountains;
+}
+
+function getCompanions() {
+  return runtimeData.companions;
+}
+
+function getFeeds() {
+  return runtimeData.feeds;
+}
+
+function buildLookup(items) {
+  return Object.fromEntries(items.map((item) => [item.id, item]));
+}
+
+function formatRelativeTime(value) {
+  if (!value) {
+    return "방금 전";
+  }
+
+  const diffMs = Date.now() - new Date(value).getTime();
+  const diffMinutes = Math.max(1, Math.floor(diffMs / 60000));
+
+  if (diffMinutes < 60) {
+    return `${diffMinutes}분 전`;
+  }
+
+  const diffHours = Math.floor(diffMinutes / 60);
+  if (diffHours < 24) {
+    return `${diffHours}시간 전`;
+  }
+
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays < 7) {
+    return `${diffDays}일 전`;
+  }
+
+  return new Intl.DateTimeFormat("ko-KR", { month: "numeric", day: "numeric" }).format(new Date(value));
+}
+
+function firstAvatarSeed(name) {
+  if (!name) {
+    return "🧗";
+  }
+
+  const first = name.trim().charAt(0);
+  return first || "🧗";
+}
+
+function buildMountainId(name, index) {
+  const fallback = mountainFallbackByName[name];
+  return fallback ? fallback.id : `mountain-${index + 1}`;
+}
+
+function buildMountainMeta(region, elevationM, fallback) {
+  const safeRegion = region || fallback?.area || "정보 준비 중";
+  const safeElevation = elevationM ? `${elevationM}m` : fallback?.elevation || "정보 준비 중";
+  return `${safeRegion} · 해발 ${safeElevation}`;
+}
+
+function mapRouteRecord(route, index, fallbackRoute) {
+  const difficultyMap = {
+    easy: { label: "쉬움", className: "diff-easy" },
+    medium: { label: "중급", className: "diff-mid" },
+    hard: { label: "어려움", className: "diff-hard" }
+  };
+
+  const difficulty = difficultyMap[route.difficulty] || { label: "보통", className: "diff-mid" };
+  const tags = [
+    route.start_point ? `📍 ${route.start_point}` : null,
+    route.end_point ? `🏁 ${route.end_point}` : null,
+    route.caution_notes ? "⚠ 주의 구간" : null
+  ].filter(Boolean);
+
+  return {
+    id: route.id || fallbackRoute?.id || `route-${index + 1}`,
+    name: route.name || fallbackRoute?.name || `추천 코스 ${index + 1}`,
+    difficultyLabel: difficulty.label,
+    difficultyClass: difficulty.className,
+    distance: route.distance_km ? `${route.distance_km}km` : fallbackRoute?.distance || "거리 정보 준비 중",
+    time: route.duration_min ? `약 ${route.duration_min}분` : fallbackRoute?.time || "시간 정보 준비 중",
+    gain: route.elevation_gain_m ? `+${route.elevation_gain_m}m` : fallbackRoute?.gain || "고도 정보 준비 중",
+    startPoint: route.start_point || fallbackRoute?.startPoint || "정보 준비 중",
+    endPoint: route.end_point || fallbackRoute?.endPoint || "정보 준비 중",
+    tags: tags.length ? tags : (fallbackRoute?.tags || ["🧭 코스 정보 정리 중"]),
+    highlight: route.is_recommended ? "🔥 추천 코스" : fallbackRoute?.highlight
+  };
+}
+
+function mapMountainRecord(record, index) {
+  const fallback = mountainFallbackByName[record.name] || APP_DATA.mountains[index % APP_DATA.mountains.length] || {};
+  const routes = Array.isArray(record.routes) && record.routes.length
+    ? record.routes.map((route, routeIndex) => mapRouteRecord(route, routeIndex, fallback.routes?.[routeIndex]))
+    : (fallback.routes || []);
+  const primaryRoute = routes[0];
+  const cautionRoute = routes.find((route) => route.tags.some((tag) => tag.includes("⚠")));
+
+  return {
+    ...fallback,
+    id: buildMountainId(record.name, index),
+    dbId: record.id,
+    name: record.name,
+    area: record.region || fallback.area || "정보 준비 중",
+    elevation: record.elevation_m ? `${record.elevation_m}m` : fallback.elevation || "정보 준비 중",
+    badge: fallback.badge || (record.is_korea_100 ? "⛰ 100대 명산" : "🧭 탐색"),
+    cardMeta: buildMountainMeta(record.region, record.elevation_m, fallback),
+    cardStats: [
+      routes.length ? `🥾 ${routes.length}개 코스` : "🥾 코스 준비 중",
+      record.parking_info ? "🚗 주차 정보" : (fallback.cardStats?.[1] || "🧭 기본 정보")
+    ],
+    stats: [
+      { value: String(routes.length || 0), key: "🥾 코스" },
+      { value: "연동 전", key: "📝 후기" },
+      { value: "업데이트 예정", key: "📊 혼잡도" },
+      { value: record.best_season || "사계절", key: "🍃 추천 시기" }
+    ],
+    liveSummary: record.description || fallback.liveSummary || "산 설명이 아직 입력되지 않았습니다.",
+    entryPoint: primaryRoute?.startPoint || fallback.entryPoint || record.address || "대표 입구 정보 준비 중",
+    mapNote: primaryRoute?.summary || fallback.mapNote || "코스 상세 설명을 준비 중입니다.",
+    communityPulse: "커뮤니티 데이터 연동 준비 중",
+    routes,
+    infoCards: [
+      {
+        title: "📍 기본 정보",
+        body: `주소: ${record.address || "정보 준비 중"}<br>해발고도: ${record.elevation_m ? `${record.elevation_m}m` : "정보 준비 중"}<br>교통: ${record.transit_info || "정보 준비 중"}<br>추천 시기: ${record.best_season || "사계절"}`
+      },
+      {
+        title: "🚗 편의 정보",
+        body: `주차: ${record.parking_info || "정보 준비 중"}<br>화장실: ${record.restroom_info || "정보 준비 중"}`,
+        style: "margin-top:12px;"
+      },
+      {
+        title: "⚠ 코스 메모",
+        body: cautionRoute?.tags?.join(", ") || primaryRoute?.tags?.join(", ") || "코스 메모 준비 중",
+        style: "margin-top:12px; border-color: rgba(232, 101, 42, 0.15); background: rgba(232, 101, 42, 0.05);",
+        titleStyle: "color: var(--ember);"
+      }
+    ]
+  };
+}
+
+function filteredMountains() {
+  const query = state.mountainSearch.trim().toLowerCase();
+  if (!query) {
+    return getMountains();
+  }
+
+  return getMountains().filter((mountain) => {
+    return [mountain.name, mountain.area, mountain.entryPoint, mountain.mapNote]
+      .filter(Boolean)
+      .some((value) => value.toLowerCase().includes(query));
+  });
+}
+
+async function loadMountainsFromSupabase() {
+  if (!supabaseClient) {
+    return;
+  }
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("mountains")
+      .select(`
+        id,
+        name,
+        region,
+        address,
+        elevation_m,
+        description,
+        thumbnail_url,
+        parking_info,
+        restroom_info,
+        transit_info,
+        best_season,
+        is_korea_100,
+        routes (
+          id,
+          name,
+          difficulty,
+          distance_km,
+          duration_min,
+          elevation_gain_m,
+          start_point,
+          end_point,
+          summary,
+          caution_notes,
+          is_recommended
+        )
+      `)
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data?.length) {
+      showToast("Supabase에 산 데이터가 아직 없습니다.");
+      return;
+    }
+
+    runtimeData.mountains = data.map(mapMountainRecord);
+
+    if (!runtimeData.mountains.some((mountain) => mountain.id === state.activeMountainId)) {
+      state.activeMountainId = runtimeData.mountains[0].id;
+    }
+
+    renderMountainCards();
+    renderHomeMapBriefs();
+    renderDetailScreen();
+    showToast("홈 산 목록을 Supabase 데이터로 불러왔습니다.");
+  } catch (error) {
+    console.error("Failed to load mountains from Supabase", error);
+    showToast("Supabase 연결에 실패해 기본 샘플 데이터를 표시합니다.");
+  }
+}
+
+function mapPostRecord(post, lookups) {
+  const profile = lookups.profiles[post.user_id];
+  const mountainRecord = post.mountain_id ? lookups.mountains[post.mountain_id] : null;
+  const routeRecord = post.route_id ? lookups.routes[post.route_id] : null;
+  const runtimeMountain = runtimeData.mountains.find((mountain) => mountain.dbId === post.mountain_id)
+    || runtimeData.mountains.find((mountain) => mountain.name === mountainRecord?.name)
+    || null;
+  const mountainFallback = mountainRecord?.name ? mountainFallbackByName[mountainRecord.name] : null;
+  const images = (lookups.images[post.id] || []).sort((a, b) => a.sort_order - b.sort_order);
+  const typeLabelMap = {
+    review: "실전 후기",
+    tip: "팁",
+    free: "자유글",
+    badge_share: "배지"
+  };
+
+  const reviewItems = [
+    post.perceived_difficulty ? { label: "💪 체감 난이도", value: post.perceived_difficulty } : null,
+    post.crowd_level ? { label: "👥 혼잡도", value: post.crowd_level } : null,
+    post.beginner_friendly !== null && post.beginner_friendly !== undefined
+      ? { label: "🔰 초보 적합", value: post.beginner_friendly ? "추천" : "주의" }
+      : null,
+    post.confusing_section !== null && post.confusing_section !== undefined
+      ? { label: "🧭 길찾기", value: post.confusing_section ? "헷갈리는 구간 있음" : "비교적 명확" }
+      : null,
+    post.weather_context ? { label: "🌤 날씨", value: post.weather_context } : null,
+    routeRecord?.name ? { label: "🥾 코스", value: routeRecord.name } : null
+  ].filter(Boolean).slice(0, 3);
+
+  return {
+    id: post.id,
+    userAvatar: firstAvatarSeed(profile?.nickname),
+    userName: profile?.nickname || "익명 등산러",
+    time: `${formatRelativeTime(post.created_at)}${mountainRecord?.name ? ` · ${mountainRecord.name}` : ""}`,
+    visualClass: runtimeMountain?.heroClass || mountainFallback?.heroClass || "bg-bukhansan",
+    visualIcon: images.length ? "📷" : (post.post_type === "tip" ? "🧭" : post.post_type === "badge_share" ? "🏅" : "🏔"),
+    visualText: post.title || typeLabelMap[post.post_type] || "커뮤니티 글",
+    mountainLabel: routeRecord?.name || mountainRecord?.name || "커뮤니티",
+    description: post.content,
+    reviewItems: reviewItems.length ? reviewItems : [{ label: "💬 글 유형", value: typeLabelMap[post.post_type] || "커뮤니티" }],
+    likes: post.like_count || 0,
+    comments: post.comment_count || 0,
+    mountainId: runtimeMountain?.id || mountainFallback?.id || buildMountainId(mountainRecord?.name || "mountain", 0)
+  };
+}
+
+async function loadPostsFromSupabase() {
+  if (!supabaseClient) {
+    return;
+  }
+
+  try {
+    const { data: posts, error: postsError } = await supabaseClient
+      .from("posts")
+      .select(`
+        id,
+        user_id,
+        mountain_id,
+        route_id,
+        title,
+        content,
+        post_type,
+        perceived_difficulty,
+        crowd_level,
+        beginner_friendly,
+        confusing_section,
+        weather_context,
+        like_count,
+        comment_count,
+        created_at,
+        visibility
+      `)
+      .eq("visibility", "public")
+      .order("created_at", { ascending: false })
+      .limit(12);
+
+    if (postsError) {
+      throw postsError;
+    }
+
+    if (!posts?.length) {
+      showToast("Supabase에 커뮤니티 글이 아직 없습니다.");
+      return;
+    }
+
+    const profileIds = [...new Set(posts.map((post) => post.user_id).filter(Boolean))];
+    const mountainIds = [...new Set(posts.map((post) => post.mountain_id).filter(Boolean))];
+    const routeIds = [...new Set(posts.map((post) => post.route_id).filter(Boolean))];
+    const postIds = posts.map((post) => post.id);
+
+    const [profilesResult, mountainsResult, routesResult, imagesResult] = await Promise.all([
+      profileIds.length
+        ? supabaseClient.from("profiles").select("id, nickname, profile_image_url").in("id", profileIds)
+        : Promise.resolve({ data: [], error: null }),
+      mountainIds.length
+        ? supabaseClient.from("mountains").select("id, name").in("id", mountainIds)
+        : Promise.resolve({ data: [], error: null }),
+      routeIds.length
+        ? supabaseClient.from("routes").select("id, name").in("id", routeIds)
+        : Promise.resolve({ data: [], error: null }),
+      postIds.length
+        ? supabaseClient.from("post_images").select("post_id, image_url, sort_order").in("post_id", postIds)
+        : Promise.resolve({ data: [], error: null })
+    ]);
+
+    if (profilesResult.error) throw profilesResult.error;
+    if (mountainsResult.error) throw mountainsResult.error;
+    if (routesResult.error) throw routesResult.error;
+    if (imagesResult.error) throw imagesResult.error;
+
+    const imageLookup = {};
+    (imagesResult.data || []).forEach((image) => {
+      imageLookup[image.post_id] = imageLookup[image.post_id] || [];
+      imageLookup[image.post_id].push(image);
+    });
+
+    const lookups = {
+      profiles: buildLookup(profilesResult.data || []),
+      mountains: buildLookup(mountainsResult.data || []),
+      routes: buildLookup(routesResult.data || []),
+      images: imageLookup
+    };
+
+    runtimeData.feeds = posts.map((post) => mapPostRecord(post, lookups));
+    renderFeedPosts("home-feed-list", getFeeds());
+    renderFeedPosts("companion-list", getFeeds());
+    renderDetailScreen();
+    showToast("커뮤니티 글을 Supabase 데이터로 불러왔습니다.");
+  } catch (error) {
+    console.error("Failed to load posts from Supabase", error);
+    showToast("커뮤니티 글 연결에 실패해 기본 샘플 데이터를 표시합니다.");
+  }
+}
+
 function mountainById(id) {
-  return APP_DATA.mountains.find((mountain) => mountain.id === id) || APP_DATA.mountains[0];
+  return getMountains().find((mountain) => mountain.id === id) || getMountains()[0];
 }
 
 function companionByMountain(id) {
-  return APP_DATA.companions.filter((item) => item.mountainId === id);
+  return getCompanions().filter((item) => item.mountainId === id);
 }
 
 function feedsByMountain(id) {
-  return APP_DATA.feeds.filter((item) => item.mountainId === id);
+  return getFeeds().filter((item) => item.mountainId === id);
 }
 
 function renderMountainCards() {
   const target = document.getElementById("home-mountain-list");
-  target.innerHTML = APP_DATA.mountains.map((mountain) => `
+  const mountains = filteredMountains();
+
+  if (!mountains.length) {
+    target.innerHTML = '<div class="empty-text" style="padding: 0 20px 12px;">검색 결과가 없습니다. 다른 산 이름이나 지역을 입력해 보세요.</div>';
+    return;
+  }
+
+  target.innerHTML = mountains.map((mountain) => `
     <article class="mountain-card" data-go="detail" data-mountain-id="${mountain.id}">
       <div class="mountain-card-img ${mountain.heroClass}">
         <div class="badge">${mountain.badge}</div>
@@ -450,6 +829,12 @@ function renderMountainCards() {
 
 function renderCompanionCards(targetId, items) {
   const target = document.getElementById(targetId);
+
+  if (!items.length) {
+    target.innerHTML = '<div class="empty-text" style="padding: 0 20px 12px;">아직 연결된 동행 글이 없습니다.</div>';
+    return;
+  }
+
   target.innerHTML = items.map((item) => `
     <article class="companion-card" ${targetId === "home-companion-list" ? 'data-go="companion"' : ""}>
       <div class="cc-header">
@@ -482,6 +867,11 @@ function renderCompanionCards(targetId, items) {
 
 function renderFeedPosts(targetId, items, compact = false) {
   const target = document.getElementById(targetId);
+
+  if (!items.length) {
+    target.innerHTML = '<div class="empty-text" style="padding: 0 20px 12px;">아직 연결된 커뮤니티 글이 없습니다.</div>';
+    return;
+  }
   target.innerHTML = items.map((item, index) => `
     <article class="feed-post" ${compact && index === 0 ? 'style="margin-top:12px;"' : ""}>
       <div class="fp-header">
@@ -513,7 +903,7 @@ function renderFeedPosts(targetId, items, compact = false) {
             <button class="fp-action" type="button" data-action="like"><span>🤍</span><span>${item.likes}</span></button>
             <div class="fp-action"><span>💬</span><span>${item.comments}</span></div>
             <div class="fp-action"><span>🔖</span><span>저장</span></div>
-            <button class="fp-action" type="button" data-action="show-companion"><span>👥</span><span>같이 가기</span></button>
+            <button class="fp-action" type="button" data-action="show-companion"><span>👥</span><span>동행 보기</span></button>
           </div>
         `}
       </div>
@@ -543,8 +933,12 @@ function renderDetailScreen() {
   document.getElementById("detail-live-summary").innerHTML = `
     <div style="padding:14px 20px 4px;">
       <div class="brief-card">
-        <div class="brief-title">⚡ 실시간 현황</div>
+        <div class="brief-title">🗺 지도 브리핑</div>
         <div class="brief-body" style="margin-top:8px;">${mountain.liveSummary}</div>
+      </div>
+      <div class="brief-card" style="margin-top:12px;">
+        <div class="brief-title">📍 입구 · 최근 메모</div>
+        <div class="brief-body" style="margin-top:8px;">${mountain.entryPoint}<br>${mountain.mapNote}<br><strong style="color: var(--sage);">${mountain.communityPulse}</strong></div>
       </div>
     </div>
   `;
@@ -576,7 +970,7 @@ function renderDetailScreen() {
     </article>
   `).join("");
 
-  document.getElementById("modal-companion-copy").innerHTML = `${mountain.name} 관련 동행 모집 게시글이 현재 <strong style="color: var(--ember);">${companionByMountain(mountain.id).length}</strong>건 있습니다. 기본 추천은 3~5명 그룹이며, 실명 인증 호스트를 우선 노출합니다.`;
+  document.getElementById("modal-companion-copy").innerHTML = `${mountain.name} 커뮤니티에서 동행으로 전환된 글이 현재 <strong style="color: var(--ember);">${companionByMountain(mountain.id).length}</strong>건 있습니다. 기본 추천은 3~5명 그룹이며, 후기와 신뢰도가 높은 호스트를 우선 노출합니다.`;
   renderModalCompanions();
 }
 
@@ -589,6 +983,25 @@ function renderProfile() {
     <article class="brief-card" style="margin-top: ${index === 0 ? 12 : 10}px;">
       <div class="brief-title">${review.title}</div>
       <div class="brief-body">${review.body}</div>
+    </article>
+  `).join("");
+}
+
+function renderHomeMapBriefs() {
+  const target = document.getElementById("home-map-list");
+  const mountains = filteredMountains().slice(0, 3);
+
+  if (!mountains.length) {
+    target.innerHTML = '<div class="empty-text">지도 브리핑을 보여줄 산이 없습니다.</div>';
+    return;
+  }
+
+  target.innerHTML = mountains.map((mountain) => `
+    <article class="brief-card map-brief-card" data-go="detail" data-mountain-id="${mountain.id}">
+      <div class="brief-title">${mountain.name} 지도 브리핑</div>
+      <div class="brief-body">📍 ${mountain.entryPoint}</div>
+      <div class="brief-body">🗺 ${mountain.mapNote}</div>
+      <div class="brief-body" style="color: var(--sage); font-weight: 800;">${mountain.communityPulse}</div>
     </article>
   `).join("");
 }
@@ -611,9 +1024,11 @@ function renderModalCompanions() {
 
 function renderApp() {
   renderMountainCards();
-  renderCompanionCards("home-companion-list", APP_DATA.companions.slice(0, 2));
-  renderCompanionCards("companion-list", APP_DATA.companions);
-  renderFeedPosts("home-feed-list", APP_DATA.feeds);
+  renderFeedPosts("home-feed-list", getFeeds());
+  renderHomeMapBriefs();
+  renderCompanionCards("home-companion-list", getCompanions().slice(0, 2));
+  renderFeedPosts("companion-list", getFeeds());
+  renderCompanionCards("community-companion-list", getCompanions());
   renderDetailScreen();
   renderProfile();
 }
@@ -726,11 +1141,29 @@ document.getElementById("view-companions-btn").addEventListener("click", () => {
   goScreen("companion");
 });
 
-document.getElementById("mountain-search").addEventListener("focus", () => {
-  state.activeMountainId = "bukhansan";
+const mountainSearchInput = document.getElementById("mountain-search");
+
+mountainSearchInput.addEventListener("input", (event) => {
+  state.mountainSearch = event.target.value;
+  renderMountainCards();
+  renderHomeMapBriefs();
+});
+
+mountainSearchInput.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter") {
+    return;
+  }
+
+  const [firstMountain] = filteredMountains();
+  if (!firstMountain) {
+    showToast("검색 결과가 없습니다.");
+    return;
+  }
+
+  state.activeMountainId = firstMountain.id;
   renderDetailScreen();
   goScreen("detail");
-  showToast("북한산 상세 화면으로 이동했습니다.");
+  showToast(`${firstMountain.name} 지도와 커뮤니티 화면으로 이동했습니다.`);
 });
 
 companionForm.addEventListener("submit", (event) => {
@@ -746,9 +1179,15 @@ companionForm.addEventListener("submit", (event) => {
   document.querySelectorAll("[data-single-group='level'] .option-btn").forEach((button, index) => {
     button.classList.toggle("selected", index === 0);
   });
-  showToast("🎉 동행 모집글이 올라갔어요! 기본 안전 설정도 함께 적용됩니다.");
+  showToast("🎉 게시글이 올라갔어요! 커뮤니티와 산 상세에 반영됩니다.");
 });
 
-renderApp();
-updateClock();
-window.setInterval(updateClock, 10000);
+async function initApp() {
+  renderApp();
+  updateClock();
+  window.setInterval(updateClock, 10000);
+  await loadMountainsFromSupabase();
+  await loadPostsFromSupabase();
+}
+
+initApp();

@@ -35,12 +35,12 @@
     }
 
     .page {
-      width: min(1200px, calc(100% - 32px));
+      width: min(1560px, calc(100% - 40px));
       margin: 0 auto;
       padding: 28px 0 48px;
       display: grid;
-      grid-template-columns: minmax(280px, 420px) minmax(300px, 1fr);
-      gap: 28px;
+      grid-template-columns: minmax(320px, 420px) minmax(760px, 1fr);
+      gap: 32px;
       align-items: start;
     }
 
@@ -178,13 +178,13 @@
 
     .phone-stage {
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       padding: 10px 0;
     }
 
     .shell {
-      width: min(100%, 390px);
-      min-height: 844px;
+      width: min(100%, 980px);
+      min-height: 860px;
       background: var(--white);
       border-radius: 32px;
       box-shadow: 0 28px 70px rgba(15, 20, 12, 0.24);
@@ -404,6 +404,12 @@
       gap: 12px;
     }
 
+    .map-brief-grid {
+      display: grid;
+      gap: 12px;
+      padding: 0 20px 4px;
+    }
+
     .tag-scroll::-webkit-scrollbar,
     .mountain-scroll::-webkit-scrollbar,
     .filter-row::-webkit-scrollbar,
@@ -545,6 +551,11 @@
     .brief-body,
     .st-sub {
       font-size: 12px;
+    }
+
+    .empty-text {
+      font-size: 13px;
+      line-height: 1.6;
     }
 
     .mountain-card-stats,
@@ -958,6 +969,16 @@
       border-radius: 16px;
     }
 
+    .map-brief-card {
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .map-brief-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(18, 22, 16, 0.12);
+    }
+
     .brief-title {
       font-size: 14px;
     }
@@ -1295,6 +1316,52 @@
     .bg-cheonggyesan { background: linear-gradient(160deg, #1e3a4a, #2d5a6b, #4a849a); }
     .bg-achasan { background: linear-gradient(160deg, #4a3a28, #6b5534, #9a7c4f); }
     .bg-dobongsan { background: linear-gradient(160deg, #1a2a3e, #2d4a6b, #4a6b9a); }
+
+    @media (min-width: 981px) {
+      .mountain-scroll {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        overflow: visible;
+      }
+
+      .mountain-card {
+        width: auto;
+      }
+
+      .map-brief-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .hero-header,
+      .screen-header,
+      .profile-hero {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .section-head,
+      .tag-scroll,
+      .filter-row,
+      .cert-row {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .companion-card,
+      .feed-post,
+      .route-card,
+      .create-post-btn,
+      .emergency-btn,
+      .safety-card {
+        margin-left: 24px;
+        margin-right: 24px;
+      }
+
+      .form-shell {
+        max-width: 760px;
+      }
+    }
 
     @media (max-width: 980px) {
       .page {

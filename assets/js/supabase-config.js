@@ -1,0 +1,2 @@
+window.SANTA_SUPABASE_URL = "";
+window.SANTA_SUPABASE_ANON_KEY = "";
