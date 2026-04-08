@@ -1,4 +1,4 @@
-# SANTA 1단계 Supabase 실행 가이드
+c# SANTA 1단계 Supabase 실행 가이드
 
 ## 이 문서의 목적
 이 문서는 초보자 기준으로 SANTA를 실제 Supabase 데이터와 연결하기 위한 첫 실행 순서를 설명한다.
